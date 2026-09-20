@@ -3,11 +3,14 @@ import { Config } from "./config";
 import express, { type Express, type NextFunction, type Request, type Response } from "express";
 import { logLine } from "./logger";
 import { errorHandler, notFoundHandler } from "./errors";
-import type {ContentProvider} from "./generation-engine/geminiProvider"
+import type { ContentProvider } from "./generation-engine/geminiProvider"
+import { curriculumRouter } from "./routes/curriculum.route";
+import { lessonsRouter } from "./routes/lesson.route";
+import { reportsRouter } from "./routes/report.route";
 
 export type AppDependencies = {
-  provider: ContentProvider;
-  config: Config;
+    provider: ContentProvider;
+    config: Config;
 };
 
 export function createApp(deps: AppDependencies): Express {
@@ -29,6 +32,10 @@ export function createApp(deps: AppDependencies): Express {
     app.get("/health", (_req, res) => {
         res.json({ ok: true, message: "API Running!" });
     });
+
+    app.use('/v1/curriculum', curriculumRouter(deps));
+    app.use('/v1/lessons', lessonsRouter(deps));
+    app.use('/v1/reports', reportsRouter());
 
     app.use(notFoundHandler);
     app.use(errorHandler);
