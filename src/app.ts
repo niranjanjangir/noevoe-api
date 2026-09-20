@@ -3,9 +3,14 @@ import { Config } from "./config";
 import express, { type Express, type NextFunction, type Request, type Response } from "express";
 import { logLine } from "./logger";
 import { errorHandler, notFoundHandler } from "./errors";
+import type {ContentProvider} from "./generation-engine/geminiProvider"
 
+export type AppDependencies = {
+  provider: ContentProvider;
+  config: Config;
+};
 
-export function createApp(config: Config): Express {
+export function createApp(deps: AppDependencies): Express {
     const app = express();
 
     app.use(express.json({ limit: "256kb" }));

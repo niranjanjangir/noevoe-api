@@ -1,6 +1,6 @@
 import type { ValidationIssue, ValidationResult } from "../schema";
-import { AppError } from "../../errors";
-import { logLine } from "../../logger";
+import { AppError } from "../errors";
+import { logLine } from "../logger";
 
 export type GenerateFn = (previousIssues: ValidationIssue[]) => Promise<unknown>;
 export type ValidateFn<T> = (raw: unknown) => ValidationResult<T>;

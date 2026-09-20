@@ -3,7 +3,7 @@ export type Config = {
     geminiApiKey: string | null;
     geminiModel: string;
     generationTimeoutMs: number;
-    maxGenerationAttemps: number;
+    maxGenerationAttempts: number;
 }
 
 function isValidNumber(value: string | undefined): boolean {
@@ -20,6 +20,6 @@ export function appConfig(env: Record<string,string | undefined>): Config {
         geminiApiKey: key,
         geminiModel: model,
         generationTimeoutMs: isValidNumber(env.GENERATION_TIMEOUT_MS) ? Number(env.GENERATION_TIMEOUT_MS) : 45_000,
-        maxGenerationAttemps: isValidNumber(env.MAX_GENERATION_ATTEMPTS) ? Number(env.MAX_GENERATION_ATTEMPTS) : 3,
+        maxGenerationAttempts: isValidNumber(env.MAX_GENERATION_ATTEMPTS) ? Number(env.MAX_GENERATION_ATTEMPTS) : 3,
     }
 }

@@ -1,9 +1,15 @@
 import { createApp } from "./app";
 import { appConfig } from "./config";
 import { logLine } from "./logger";
+import {createProvider} from "./generation-engine/index"
 
 const config = appConfig(process.env);
-const app = createApp(config);
+const provider = createProvider(config);
+
+if(!provider)
+        throw new Error("Gemini configuration missing.")
+
+const app = createApp({ provider, config });
 
 app.listen(config.port, ()=>{
     logLine({ msg: "listening", port: config.port });

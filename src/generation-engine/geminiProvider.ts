@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import type { CurriculumGenerateRequest, LessonGenerateRequest, ValidationIssue } from "../schema";
-import { AppError } from "../../errors";
+import { AppError } from "../errors";
 import { buildCurriculumPrompt } from "./system-prompts/curriculum.prompt";
 import { buildLessonPrompt } from "./system-prompts/lesson.prompt";
 import { curriculumOutputJsonSchema, lessonOutputJsonSchema } from "./schema";
