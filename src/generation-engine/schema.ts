@@ -3,7 +3,20 @@ import { CurriculumGenerationOutputSchema, GeneratedLessonSchema } from "../sche
 
 type JsonObject = Record<string, unknown>;
 
-const REMOVED_KEYWORDS = ["$schema", "additionalProperties", "default", "pattern", "propertyNames", "$id", "id"];
+const REMOVED_KEYWORDS = [
+  "$schema",
+  "additionalProperties",
+  "default",
+  "maxLength",
+  "maxItems",
+  "maximum",
+  "minLength",
+  "minItems",
+  "minimum",
+  "pattern",
+  "propertyNames",
+  "$id",
+];
 
 export function toGeminiSchema(node: unknown): unknown {
   if (Array.isArray(node)) {
