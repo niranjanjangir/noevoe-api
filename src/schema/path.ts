@@ -36,7 +36,6 @@ export const CapabilitySchema = z.strictObject({
   description: z.string().min(1).max(600),
   order: z.number().int().min(1),
   masteryCriteria: z.array(z.string().min(1).max(300)).min(1).max(5),
-  prerequisites: z.array(z.string().min(1).max(80)),
   lessons: z.array(LessonRefSchema).min(1).max(6),
 });
 export type Capability = z.infer<typeof CapabilitySchema>;

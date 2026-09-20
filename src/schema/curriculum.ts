@@ -15,7 +15,6 @@ export const CurriculumCapabilitySchema = z.strictObject({
   description: z.string().trim().min(1).max(600),
   order: z.number().int().min(1),
   masteryCriteria: z.array(z.string().trim().min(1).max(300)).min(1).max(5),
-  prerequisites: z.array(SlugId).max(8).default([]),
   lessons: z.array(LessonOutlineSchema).min(1).max(6),
 });
 export type CurriculumCapability = z.infer<typeof CurriculumCapabilitySchema>;
