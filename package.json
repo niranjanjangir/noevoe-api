@@ -1,7 +1,7 @@
 {
   "name": "neoveo-api",
   "version": "0.1.0",
-  "description": "Noevoe - Learn Hobby: Gemini curriculum and lesson generation service",
+  "description": "noevoe - Learn Hobby: Gemini curriculum and lesson generation service",
   "private": true,
   "type": "module",
   "scripts": {
