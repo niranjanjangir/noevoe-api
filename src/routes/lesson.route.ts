@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { generateWithRepair } from "../generation-engine/generateWithRepair";
 import type { AppDependencies } from "../app";
-import { LessonGenerateRequestSchema, validateGeneratedLesson, type Lesson } from "../schema";
+import { checkLearnerInput, LessonGenerateRequestSchema, validateGeneratedLesson, type Lesson } from "../schema";
 import { AppError } from "../errors";
 
 export function lessonsRouter(deps: AppDependencies): Router {
@@ -14,6 +14,11 @@ export function lessonsRouter(deps: AppDependencies): Router {
                 throw new AppError("bad_request", 400, "Invalid request body", parsed.error.issues);
             }
             const request = parsed.data;
+            const inputValues = [request.hobby, request.currentLevelNote].filter((value): value is string => Boolean(value));
+            const checkInputSafety = inputValues.map(checkLearnerInput).find((result) => !result.safe);
+            if (checkInputSafety && !checkInputSafety.safe) {
+                throw new AppError("hobby_rejected", 422, checkInputSafety.reason);
+            }
 
             const lesson: Lesson = await generateWithRepair(
                 (previousIssues) => deps.provider.generateLesson(request, previousIssues),

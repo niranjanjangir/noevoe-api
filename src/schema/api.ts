@@ -2,6 +2,7 @@ import { z } from "zod";
 import { CurriculumCapabilitySchema, CurriculumSchema, LessonOutlineSchema } from "./curriculum";
 import { LessonSchema } from "./lesson";
 import { CurrentLevelSchema, TargetLevelSchema } from "./levels";
+import { normalizeLearnerInput } from "./inputSafety";
 
 const Range = z.strictObject({ min: z.number().int().min(1), max: z.number().int().min(1) });
 
@@ -18,10 +19,10 @@ export type GenerationConstraints = z.infer<typeof GenerationConstraintsSchema>;
 export const DEFAULT_CONSTRAINTS: GenerationConstraints = GenerationConstraintsSchema.parse({});
 
 export const CurriculumGenerateRequestSchema = z.strictObject({
-  hobbyDescription: z.string().trim().min(3).max(500),
+  hobbyDescription: z.string().transform(normalizeLearnerInput).pipe(z.string().min(3).max(500)),
   targetLevel: TargetLevelSchema,
   currentLevel: CurrentLevelSchema,
-  currentLevelNote: z.string().trim().max(300).optional(),
+  currentLevelNote: z.string().transform(normalizeLearnerInput).pipe(z.string().max(300)).optional(),
   constraints: GenerationConstraintsSchema.default(DEFAULT_CONSTRAINTS),
 });
 export type CurriculumGenerateRequest = z.infer<typeof CurriculumGenerateRequestSchema>;
@@ -37,7 +38,7 @@ export const LessonGenerateRequestSchema = z.strictObject({
   goal: z.string().trim().min(1).max(200),
   targetLevel: TargetLevelSchema,
   currentLevel: CurrentLevelSchema,
-  currentLevelNote: z.string().trim().max(300).optional(),
+  currentLevelNote: z.string().transform(normalizeLearnerInput).pipe(z.string().max(300)).optional(),
   capability: CurriculumCapabilitySchema,
   lessonOutline: LessonOutlineSchema,
   lessonId: z.string().min(1).max(80),
