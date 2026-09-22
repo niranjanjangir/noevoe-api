@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { generateWithRepair } from "../generation-engine/generateWithRepair";
-import { checkLearnerInput, CurriculumGenerateRequestSchema, validateCurriculumOutput, type CurriculumGenerationOutput } from "../schema";
+import { checkLearnerInput, CurriculumGenerateRequestSchema, validateCurriculumOutput, ValidationIssue, type CurriculumGenerationOutput } from "../schema";
 import { AppError } from "../errors";
-import type {AppDependencies} from "../app"
+import type {AppDependencies} from "../app";
 
 export function curriculumRouter(deps: AppDependencies): Router {
   const router = Router();
@@ -21,7 +21,10 @@ export function curriculumRouter(deps: AppDependencies): Router {
       }
 
       const output: CurriculumGenerationOutput = await generateWithRepair(
-        (previousIssues) => deps.provider.generateCurriculum(request, previousIssues),
+        deps.providers.map((provider) => ({
+          name: provider.name,
+          generate: (previousIssues: ValidationIssue[]) => provider.generateCurriculum(request, previousIssues),
+        })),
         (raw) => validateCurriculumOutput(raw, request.constraints),
         deps.config.maxGenerationAttempts,
         req.requestId,

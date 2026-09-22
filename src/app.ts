@@ -3,13 +3,13 @@ import { Config } from "./config";
 import express, { type Express, type NextFunction, type Request, type Response } from "express";
 import { logLine } from "./logger";
 import { errorHandler, notFoundHandler } from "./errors";
-import type { ContentProvider } from "./generation-engine/geminiProvider"
+import type { ContentProvider } from "./generation-engine/provider"
 import { curriculumRouter } from "./routes/curriculum.route";
 import { lessonsRouter } from "./routes/lesson.route";
 import { reportsRouter } from "./routes/report.route";
 
 export type AppDependencies = {
-    provider: ContentProvider;
+    providers: ContentProvider[];
     config: Config;
 };
 

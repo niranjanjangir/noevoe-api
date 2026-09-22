@@ -4,12 +4,7 @@ import { AppError } from "../errors";
 import { buildCurriculumPrompt } from "./system-prompts/curriculum.prompt";
 import { buildLessonPrompt } from "./system-prompts/lesson.prompt";
 import { curriculumOutputJsonSchema, lessonOutputJsonSchema } from "./schema";
-
-export type ContentProvider = {
-  name: "gemini";
-  generateCurriculum(request: CurriculumGenerateRequest, previousIssues: ValidationIssue[]): Promise<unknown>;
-  generateLesson(request: LessonGenerateRequest, previousIssues: ValidationIssue[]): Promise<unknown>;
-};
+import { ContentProvider } from "./index";
 
 export function createGeminiProvider(apiKey: string, model: string, timeoutMs: number): ContentProvider {
   const client = new GoogleGenAI({ apiKey });

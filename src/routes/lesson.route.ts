@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { generateWithRepair } from "../generation-engine/generateWithRepair";
 import type { AppDependencies } from "../app";
-import { checkLearnerInput, LessonGenerateRequestSchema, validateGeneratedLesson, type Lesson } from "../schema";
+import { checkLearnerInput, LessonGenerateRequestSchema, validateGeneratedLesson, ValidationIssue, type Lesson } from "../schema";
 import { AppError } from "../errors";
 
 export function lessonsRouter(deps: AppDependencies): Router {
@@ -21,7 +21,10 @@ export function lessonsRouter(deps: AppDependencies): Router {
             }
 
             const lesson: Lesson = await generateWithRepair(
-                (previousIssues) => deps.provider.generateLesson(request, previousIssues),
+                deps.providers.map((provider) => ({
+                    name: provider.name,
+                    generate: (previousIssues: ValidationIssue[]) => provider.generateLesson(request, previousIssues),
+                })),
                 (raw) =>
                     validateGeneratedLesson(
                         raw,

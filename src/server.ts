@@ -9,7 +9,7 @@ const provider = createProvider(config);
 if(!provider)
         throw new Error("Gemini configuration missing.")
 
-const app = createApp({ provider, config });
+const app = createApp({ providers: provider, config });
 
 app.listen(config.port, ()=>{
     logLine({ msg: "listening", port: config.port });
